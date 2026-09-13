@@ -6,15 +6,6 @@ function App(){
   const [loading, setLoading] = useState<boolean>(true)
   const [error, setError] = useState<string | null>(null)
 
-  useEffect(() =>{
-    fetch("http://localhost:8000/recipes/random")
-      .then((response) => response.json())
-      .then((data) =>{
-        setRecipe(data)
-      });
-
-  }, []);
-
   useEffect(() => {
     setLoading(true);
     setError(null);
