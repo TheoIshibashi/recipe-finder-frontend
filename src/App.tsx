@@ -8,6 +8,7 @@ function App(){
 
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [searchResults, setSearchResults] = useState<Recipe[]>([]);
+  const [hasSearched, setHasSearched] = useState<boolean>(false)
 
   useEffect(() => {
     setLoading(true);
@@ -37,7 +38,14 @@ function App(){
     event.preventDefault();
 
     const cleanTerm = searchTerm.trim();
-    if (!cleanTerm) return;
+    if (!cleanTerm){
+      setError("Digite um nome para buscar.");
+      return;
+    }
+
+    setHasSearched(true);
+    
+      
 
     const safeTerm = encodeURIComponent(cleanTerm);
     const url = `http://localhost:8000/recipes/search?name=${safeTerm}`
@@ -74,6 +82,10 @@ function App(){
         />
         <button type="submit">Buscar</button>
       </form>
+
+      {hasSearched && searchResults.length === 0 && (
+        <p>Nenhuma receita encontrada.</p>
+      )}
       
       {loading && <p>Carregando...</p>}
       {error && <p>Erro: {error}</p>}
