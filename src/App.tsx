@@ -34,7 +34,13 @@ function App(){
       <h1>Recipe Finder</h1>
       {loading && <p>Carregando...</p>}
       {error && <p>Erro: {error}</p>}
-      {recipe && <p>Receita atual: {recipe.name}</p>}
+      {recipe && (
+        <section>
+          <h2>Receita atual: {recipe.name}</h2>
+          <p>{recipe.category} {recipe.area}</p>
+          <img src={recipe.thumbnail} alt={recipe.name}/>
+        </section>
+      )}
     </main>
   )
 }
