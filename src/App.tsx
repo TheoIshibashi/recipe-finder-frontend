@@ -72,7 +72,7 @@ function App(){
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
-        <button type="submit">Enviar</button>
+        <button type="submit">Buscar</button>
       </form>
       
       {loading && <p>Carregando...</p>}
@@ -80,9 +80,14 @@ function App(){
 
       <section>
         {searchResults.map((recipe) => (
-          <p key={recipe.id}>
-            {recipe.name}
-          </p>
+          <article key={recipe.id}>
+            <h3>{recipe.name}</h3>
+            <img
+              src={recipe.thumbnail}
+              alt={recipe.name}
+            />
+
+          </article>
         ))}
       </section>
       
