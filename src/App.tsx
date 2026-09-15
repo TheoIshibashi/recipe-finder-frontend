@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import type { Recipe } from "./types/recipe";
+import {RecipeCard} from "./components/RecipeCard";
 
 function App(){
   const [recipe, setRecipe] = useState<Recipe | null>(null);
@@ -92,14 +93,7 @@ function App(){
 
       <section>
         {searchResults.map((recipe) => (
-          <article key={recipe.id}>
-            <h3>{recipe.name}</h3>
-            <img
-              src={recipe.thumbnail}
-              alt={recipe.name}
-            />
-
-          </article>
+          <RecipeCard key={recipe.id} recipe={recipe} />
         ))}
       </section>
       
