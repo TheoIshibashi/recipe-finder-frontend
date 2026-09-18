@@ -15,3 +15,9 @@ export interface Ingredient{
     name: string;
     measure: string;
 }
+
+export interface RecipeSummary{
+    id: string;
+    name: string;
+    thumbnail: string;
+}

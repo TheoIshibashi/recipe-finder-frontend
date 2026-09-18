@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import type { Recipe } from "./types/recipe";
+import type{ Recipe, RecipeSummary } from "./types/recipe";
 import {RecipeCard} from "./components/RecipeCard";
 
 function App(){
@@ -9,7 +9,11 @@ function App(){
 
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [searchResults, setSearchResults] = useState<Recipe[]>([]);
-  const [hasSearched, setHasSearched] = useState<boolean>(false)
+  const [hasNameSearched, setHasNameSearched] = useState<boolean>(false)
+
+  const[ingredientTerm, setIngredientTerm] = useState<string>("");
+  const[ingredientResults, setIngredientResults] = useState<RecipeSummary[]>([]);
+  const[hasIngredientSearched, setHasIngredientSearched] = useState<boolean>(false)
 
   useEffect(() => {
     setLoading(true);
@@ -44,9 +48,7 @@ function App(){
       return;
     }
 
-    setHasSearched(true);
-    
-      
+    setHasNameSearched(true);
 
     const safeTerm = encodeURIComponent(cleanTerm);
     const url = `http://localhost:8000/recipes/search?name=${safeTerm}`
@@ -73,6 +75,41 @@ function App(){
     });
   };
 
+  const handleIngredientSearch = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const cleanTerm = ingredientTerm.trim();
+    if (!cleanTerm){
+      setError("Digite um ingrediente para buscar.");
+      return;
+    }
+
+    setHasIngredientSearched(true);
+
+    const safeTerm = encodeURIComponent(cleanTerm);
+    const url = `http://localhost:8000/recipes/by-ingredient?ingredient=${safeTerm}`
+
+    setLoading(true);
+    setError(null);
+
+    fetch(url)
+    .then((response) => {
+      if (!response.ok){
+        throw new Error("Resposta inválida")
+      }
+
+      return response.json();
+    })
+    .then((data) =>{
+      setIngredientResults(data)
+    })
+    .catch(() =>{
+      setError("ocorreu um erro inesperado.")
+    })
+    .finally(() =>{
+      setLoading(false);
+    });
+  };
+
   return(
     <main>
       <h1>Recipe Finder</h1>
@@ -84,10 +121,22 @@ function App(){
         <button type="submit">Buscar</button>
       </form>
 
-      {hasSearched && searchResults.length === 0 && (
+      {hasNameSearched && searchResults.length === 0 && (
         <p>Nenhuma receita encontrada.</p>
       )}
       
+      <form onSubmit={handleIngredientSearch}>
+        <input
+        value={ingredientTerm}
+        onChange={(e) => setIngredientTerm(e.target.value)}
+        />
+        <button type="submit">Buscar</button>
+      </form>
+
+      {hasIngredientSearched && ingredientResults.length === 0 && (
+        <p>Nenhuma receita encontrada para esse ingrediente.</p>
+      )}
+
       {loading && <p>Carregando...</p>}
       {error && <p>Erro: {error}</p>}
 
@@ -95,6 +144,12 @@ function App(){
         {searchResults.map((recipe) => (
           <RecipeCard key={recipe.id} recipe={recipe} />
         ))}
+      </section>
+      
+      <section>
+        {ingredientResults.map((recipe) => (
+          <RecipeCard key={recipe.id} recipe={recipe} />
+          ))}
       </section>
       
       {recipe && (

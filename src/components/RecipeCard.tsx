@@ -1,7 +1,7 @@
-import type { Recipe } from "../types/recipe";
+import type { RecipeSummary } from "../types/recipe";
 
 interface RecipeCardProps{
-    recipe: Recipe
+    recipe: RecipeSummary
 }
 
 export function RecipeCard({recipe}: RecipeCardProps){
