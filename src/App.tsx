@@ -172,10 +172,21 @@ function App(){
           <h2>Nome da Receita: {selectedRecipe.name}</h2>
           <p>Categoria: {selectedRecipe.category}</p>
           <p>Area: {selectedRecipe.area}</p>
+
           <img 
             src={selectedRecipe.thumbnail} 
             alt={selectedRecipe.name}
           />
+
+          <h3>Ingredientes</h3>
+
+          <ul>
+            {selectedRecipe.ingredients.map((ingredient) => (
+              <li key={ingredient.name}>
+                {ingredient.name} {ingredient.measure}
+              </li>
+            ))}
+          </ul>
         </section>
       )}
 
