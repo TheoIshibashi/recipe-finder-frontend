@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import type{ Recipe, RecipeSummary } from "./types/recipe";
+import type{ Recipe, RecipeSummary, } from "./types/recipe";
 import {RecipeCard} from "./components/RecipeCard";
 
 function App(){
@@ -14,6 +14,8 @@ function App(){
   const[ingredientTerm, setIngredientTerm] = useState<string>("");
   const[ingredientResults, setIngredientResults] = useState<RecipeSummary[]>([]);
   const[hasIngredientSearched, setHasIngredientSearched] = useState<boolean>(false)
+
+  const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
 
   useEffect(() => {
     setLoading(true);
@@ -31,7 +33,7 @@ function App(){
       setRecipe(data)
     })
     .catch(() =>{
-      setError("ocorreu um erro inesperado.")
+      setError("Ocorreu um erro inesperado.")
     })
     .finally(() =>{
       setLoading(false);
@@ -68,7 +70,7 @@ function App(){
       setSearchResults(data)
     })
     .catch(() =>{
-      setError("ocorreu um erro inesperado.")
+      setError("Ocorreu um erro inesperado.")
     })
     .finally(() =>{
       setLoading(false);
@@ -103,12 +105,37 @@ function App(){
       setIngredientResults(data)
     })
     .catch(() =>{
-      setError("ocorreu um erro inesperado.")
+      setError("Ocorreu um erro inesperado.")
     })
     .finally(() =>{
       setLoading(false);
     });
   };
+
+  const handleRecipeSelect = (recipeId: string) => {
+    const url = `http://localhost:8000/recipes/${recipeId}`;
+
+    setLoading(true);
+    setError(null);
+
+    fetch(url)
+    .then((response) => {
+      if (!response.ok){
+        throw new Error("Resposta inválida")
+      }
+      
+      return response.json();
+    })
+    .then((data) => {
+      setSelectedRecipe(data)
+    })
+    .catch(() =>{
+      setError("Ocorreu um erro inesperado.")
+    })
+    .finally(() =>{
+      setLoading(false);
+    });
+  }
 
   return(
     <main>
@@ -140,16 +167,36 @@ function App(){
       {loading && <p>Carregando...</p>}
       {error && <p>Erro: {error}</p>}
 
+      {selectedRecipe && (
+        <section>
+          <h2>Nome da Receita: {selectedRecipe.name}</h2>
+          <p>Categoria: {selectedRecipe.category}</p>
+          <p>Area: {selectedRecipe.area}</p>
+          <img 
+            src={selectedRecipe.thumbnail} 
+            alt={selectedRecipe.name}
+          />
+        </section>
+      )}
+
       <section>
         {searchResults.map((recipe) => (
-          <RecipeCard key={recipe.id} recipe={recipe} />
+          <RecipeCard 
+            key={recipe.id} 
+            recipe={recipe}
+            onSelect={handleRecipeSelect}
+          />
         ))}
       </section>
       
       <section>
         {ingredientResults.map((recipe) => (
-          <RecipeCard key={recipe.id} recipe={recipe} />
-          ))}
+          <RecipeCard 
+            key={recipe.id} 
+            recipe={recipe}
+            onSelect={handleRecipeSelect}
+          />
+        ))}
       </section>
       
       {recipe && (
