@@ -226,26 +226,33 @@ function App(){
         <section id="recipe-results">
         <h2>Resultados por nome</h2>
 
-        {searchResults.map((recipe) => (
-          <RecipeCard 
-            key={recipe.id} 
-            recipe={recipe}
-            onSelect={handleRecipeSelect}
-          />
-          ))}
+        <div className="recipe-grid">
+            {searchResults.map((recipe) => (
+              <RecipeCard 
+                key={recipe.id} 
+                recipe={recipe}
+                onSelect={handleRecipeSelect}
+              />
+            ))}
+        </div>
+        
         </section>
       )}
       
       {hasIngredientSearched && (
        <section id="ingredient-results">
         <h2>Resultados por ingrediente</h2>
-        {ingredientResults.map((recipe) => (
-          <RecipeCard 
-            key={recipe.id} 
-            recipe={recipe}
-            onSelect={handleRecipeSelect}
-          />
+
+        <div className="recipe-grid">
+          {ingredientResults.map((recipe) => (
+            <RecipeCard 
+              key={recipe.id} 
+              recipe={recipe}
+              onSelect={handleRecipeSelect}
+            />
         ))}
+        </div>
+        
         </section> 
       )}
       

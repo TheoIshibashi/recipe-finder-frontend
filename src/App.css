@@ -38,3 +38,9 @@ button {
 form { 
   margin-bottom: 16px;
 }
+
+.recipe-grid{
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}

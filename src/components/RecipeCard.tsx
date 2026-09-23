@@ -1,4 +1,5 @@
 import type { RecipeSummary } from "../types/recipe";
+import "./RecipeCard.css";
 
 interface RecipeCardProps{
     recipe: RecipeSummary;
@@ -7,7 +8,7 @@ interface RecipeCardProps{
 
 export function RecipeCard({recipe, onSelect}: RecipeCardProps){
     return (
-        <article>
+        <article className="recipe-card">
             <h3>Nome da Receita: {recipe.name}</h3>
 
             <img 
