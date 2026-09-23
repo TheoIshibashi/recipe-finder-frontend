@@ -140,67 +140,86 @@ function App(){
   return(
     <main>
       <h1>Recipe Finder</h1>
-      <form onSubmit={handleSearch}>
-        <input
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-        <button type="submit">Buscar</button>
-      </form>
+      <section id="search">
+        <h2>Buscar receitas</h2>
 
-      {hasNameSearched && searchResults.length === 0 && (
-        <p>Nenhuma receita encontrada.</p>
-      )}
+        <h3>Por nome</h3>
+        <form onSubmit={handleSearch}>
+          <input
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            placeholder="Buscar por nome."
+          />
+          <button type="submit">Buscar</button>
+        </form>
+
+        {hasNameSearched && searchResults.length === 0 && (
+          <p>Nenhuma receita encontrada.</p>
+        )}
+
+        <h3>Por ingrediente</h3>
+        <form onSubmit={handleIngredientSearch}>
+          <input
+            value={ingredientTerm}
+            onChange={(e) => setIngredientTerm(e.target.value)}
+            placeholder="Buscar por ingrediente."
+          />
+          <button type="submit">Buscar</button>
+        </form>
+
+        {hasIngredientSearched && ingredientResults.length === 0 && (
+          <p>Nenhuma receita encontrada para esse ingrediente.</p>
+        )}
+      </section>
       
-      <form onSubmit={handleIngredientSearch}>
-        <input
-        value={ingredientTerm}
-        onChange={(e) => setIngredientTerm(e.target.value)}
-        />
-        <button type="submit">Buscar</button>
-      </form>
-
-      {hasIngredientSearched && ingredientResults.length === 0 && (
-        <p>Nenhuma receita encontrada para esse ingrediente.</p>
-      )}
-
       {loading && <p>Carregando...</p>}
       {error && <p>Erro: {error}</p>}
 
+
       {selectedRecipe && (
-        <section>
-          <h2>Nome da Receita: {selectedRecipe.name}</h2>
-          <p>Categoria: {selectedRecipe.category}</p>
-          <p>Area: {selectedRecipe.area}</p>
+        <section id="recipe-detail">
+          <h2>Detalhes da receita</h2>
+            <div>
+              <h3>Nome da Receita: {selectedRecipe.name}</h3>
+              <p>Categoria: {selectedRecipe.category}</p>
+              <p>Área: {selectedRecipe.area}</p>
 
-          <img 
-            src={selectedRecipe.thumbnail} 
-            alt={selectedRecipe.name}
-          />
+              <img 
+                src={selectedRecipe.thumbnail} 
+                alt={selectedRecipe.name}
+              />
 
-          <h3>Ingredientes</h3>
+              <h3>Ingredientes:</h3>
 
-          <ul>
-            {selectedRecipe.ingredients.map((ingredient) => (
-              <li key={ingredient.name}>
-                {ingredient.name} {ingredient.measure}
-              </li>
-            ))}
-          </ul>
-        </section>
+              <ul>
+                {selectedRecipe.ingredients.map((ingredient) => (
+                  <li key={ingredient.name}>
+                    {ingredient.name} {ingredient.measure}
+                  </li>
+                ))}
+              </ul>
+            </div>
+        </section>  
       )}
+      
+      
+      {hasNameSearched && (
+        <section id="recipe-results">
+        <h2>Resultados por nome</h2>
 
-      <section>
         {searchResults.map((recipe) => (
           <RecipeCard 
             key={recipe.id} 
             recipe={recipe}
             onSelect={handleRecipeSelect}
           />
-        ))}
-      </section>
+          ))}
+        </section>
+      )}
       
-      <section>
+      {hasIngredientSearched && (
+       <section id="ingredient-results">
+        <h2>Resultados por ingrediente</h2>
         {ingredientResults.map((recipe) => (
           <RecipeCard 
             key={recipe.id} 
@@ -208,11 +227,13 @@ function App(){
             onSelect={handleRecipeSelect}
           />
         ))}
-      </section>
+        </section> 
+      )}
       
       {recipe && (
-        <section>
-          <h2>Receita atual: {recipe.name}</h2>
+        <section id="random-recipe">
+          <h2>Sugestão aleatória</h2>
+          <h3>{recipe.name}</h3>
           <p>{recipe.category} {recipe.area}</p>
           <img src={recipe.thumbnail} alt={recipe.name}/>
         </section>
