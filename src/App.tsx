@@ -180,9 +180,13 @@ function App(){
         <section id="recipe-detail">
           <h2>Detalhes da receita</h2>
             <div>
-              <h3>Nome da Receita: {selectedRecipe.name}</h3>
+              <h3>{selectedRecipe.name}</h3>
               <p>Categoria: {selectedRecipe.category}</p>
               <p>Área: {selectedRecipe.area}</p>
+              {selectedRecipe.tags.length > 0 && (
+                <p>Tags: {selectedRecipe.tags.join(", ")}</p>
+              )}
+              
 
               <img 
                 src={selectedRecipe.thumbnail} 
@@ -198,6 +202,19 @@ function App(){
                   </li>
                 ))}
               </ul>
+
+              <h3>Modo de preparo</h3>
+              <p>{selectedRecipe.instructions}</p>
+
+              {selectedRecipe.youtube && (
+                <a
+                  href={selectedRecipe.youtube}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Ver vídeo no youtube.
+                </a>
+              )}
             </div>
         </section>  
       )}
