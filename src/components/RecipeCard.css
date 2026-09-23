@@ -1,8 +1,10 @@
 .recipe-card{
-    max-width: 280px;
+    width: 280px;
     padding: 16px;
     border: 1px solid #ddd;
     border-radius: 12px;
+    display: flex;
+    flex-direction: column;
 }
 
 .recipe-card img {
@@ -13,4 +15,8 @@
 
 .recipe-card h3 {
     min-height: 72px;
+}
+
+.recipe-card button {
+    margin-top: auto;
 }
