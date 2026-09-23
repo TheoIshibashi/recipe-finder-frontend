@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import type{ Recipe, RecipeSummary, } from "./types/recipe";
 import {RecipeCard} from "./components/RecipeCard";
+import "./App.css";
+
 
 function App(){
   const [recipe, setRecipe] = useState<Recipe | null>(null);
@@ -148,7 +150,7 @@ function App(){
           <input
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="Buscar por nome."
+            placeholder="Buscar por nome"
           />
           <button type="submit">Buscar</button>
         </form>
@@ -162,7 +164,7 @@ function App(){
           <input
             value={ingredientTerm}
             onChange={(e) => setIngredientTerm(e.target.value)}
-            placeholder="Buscar por ingrediente."
+            placeholder="Buscar por ingrediente"
           />
           <button type="submit">Buscar</button>
         </form>
