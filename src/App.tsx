@@ -181,46 +181,47 @@ function App(){
       {selectedRecipe && (
         <section id="recipe-detail">
           <h2>Detalhes da receita</h2>
+          
+          <div className="recipe-detail-top">
+            <img 
+              src={selectedRecipe.thumbnail} 
+              alt={selectedRecipe.name}
+            />
             <div>
               <h3>{selectedRecipe.name}</h3>
               <p>Categoria: {selectedRecipe.category}</p>
               <p>Área: {selectedRecipe.area}</p>
+
               {selectedRecipe.tags.length > 0 && (
                 <p>Tags: {selectedRecipe.tags.join(", ")}</p>
               )}
-              
-
-              <img 
-                src={selectedRecipe.thumbnail} 
-                alt={selectedRecipe.name}
-              />
 
               <h3>Ingredientes:</h3>
 
-              <ul>
+              <ul>  
                 {selectedRecipe.ingredients.map((ingredient) => (
                   <li key={ingredient.name}>
                     {ingredient.name} {ingredient.measure}
                   </li>
                 ))}
               </ul>
-
-              <h3>Modo de preparo</h3>
-              <p>{selectedRecipe.instructions}</p>
-
-              {selectedRecipe.youtube && (
-                <a
-                  href={selectedRecipe.youtube}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  Ver vídeo no youtube.
-                </a>
-              )}
             </div>
+          </div>
+              
+          <h3>Modo de preparo</h3>
+          <p>{selectedRecipe.instructions}</p>
+
+            {selectedRecipe.youtube && (
+              <a
+                href={selectedRecipe.youtube}
+                target="_blank"
+                rel="noreferrer"
+              >
+                Ver vídeo no Youtube.
+              </a>
+            )}
         </section>  
       )}
-      
       
       {hasNameSearched && (
         <section id="recipe-results">
