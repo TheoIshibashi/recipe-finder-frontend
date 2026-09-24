@@ -140,133 +140,158 @@ function App(){
   }
 
   return(
-    <main>
-      <h1>Recipe Finder</h1>
-      <section id="search">
-        <h2>Buscar receitas</h2>
+    <>
+      <header className="app-header">
+        <div className="app-header-content">
+          <h1>Recipe Finder</h1>
+        </div>
+      </header>
 
-        <h3>Por nome</h3>
-        <form onSubmit={handleSearch}>
-          <input
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="Buscar por nome"
-          />
-          <button type="submit">Buscar</button>
-        </form>
+      <section className="hero">
+        <div className="hero-overlay">
+          <div className="hero-content">
 
-        {hasNameSearched && searchResults.length === 0 && (
-          <p>Nenhuma receita encontrada.</p>
-        )}
+            <p className="hero-eyebrow">Descubra receitas incríveis</p>
 
-        <h3>Por ingrediente</h3>
-        <form onSubmit={handleIngredientSearch}>
-          <input
-            value={ingredientTerm}
-            onChange={(e) => setIngredientTerm(e.target.value)}
-            placeholder="Buscar por ingrediente"
-          />
-          <button type="submit">Buscar</button>
-        </form>
+            <h2>
+              O que vamos <span>cozinhar</span> hoje?
+            </h2>
 
-        {hasIngredientSearched && ingredientResults.length === 0 && (
-          <p>Nenhuma receita encontrada para esse ingrediente.</p>
-        )}
-      </section>
-      
-      {loading && <p>Carregando...</p>}
-      {error && <p>Erro: {error}</p>}
+            <p className="hero-description">
+              Busque por nome ou ingrediente e descubra sua próxima receita favorita.
+            </p>
 
+            <section id="search">
+              <h3>Por nome</h3>
+              <form onSubmit={handleSearch}>
+                <input
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  placeholder="Buscar por nome"
+                />
+                <button type="submit">Buscar</button>
+              </form>
 
-      {selectedRecipe && (
-        <section id="recipe-detail">
-          <h2>Detalhes da receita</h2>
-          
-          <div className="recipe-detail-top">
-            <img 
-              src={selectedRecipe.thumbnail} 
-              alt={selectedRecipe.name}
-            />
-            <div>
-              <h3>{selectedRecipe.name}</h3>
-              <p>Categoria: {selectedRecipe.category}</p>
-              <p>Área: {selectedRecipe.area}</p>
-
-              {selectedRecipe.tags.length > 0 && (
-                <p>Tags: {selectedRecipe.tags.join(", ")}</p>
+              {hasNameSearched && searchResults.length === 0 && (
+                <p>Nenhuma receita encontrada.</p>
               )}
 
-              <h3>Ingredientes:</h3>
+              <h3>Por ingrediente</h3>
+              <form onSubmit={handleIngredientSearch}>
+                <input
+                  value={ingredientTerm}
+                  onChange={(e) => setIngredientTerm(e.target.value)}
+                  placeholder="Buscar por ingrediente"
+                />
+                <button type="submit">Buscar</button>
+              </form>
 
-              <ul>  
-                {selectedRecipe.ingredients.map((ingredient) => (
-                  <li key={ingredient.name}>
-                    {ingredient.name} {ingredient.measure}
-                  </li>
-                ))}
-              </ul>
-            </div>
+              {hasIngredientSearched && ingredientResults.length === 0 && (
+                <p>Nenhuma receita encontrada para esse ingrediente.</p>
+              )}
+            </section>
           </div>
-              
-          <h3>Modo de preparo</h3>
-          <p>{selectedRecipe.instructions}</p>
+        </div>
+      </section>
 
-            {selectedRecipe.youtube && (
-              <a
-                href={selectedRecipe.youtube}
-                target="_blank"
-                rel="noreferrer"
-              >
-                Ver vídeo no Youtube.
-              </a>
-            )}
-        </section>  
-      )}
-      
-      {hasNameSearched && (
-        <section id="recipe-results">
-        <h2>Resultados por nome</h2>
+      <main>
+        
+        {loading && <p>Carregando...</p>}
+        {error && <p>Erro: {error}</p>}
 
-        <div className="recipe-grid">
-            {searchResults.map((recipe) => (
+
+        {selectedRecipe && (
+          <section id="recipe-detail">
+            <h2>Detalhes da receita</h2>
+            
+            <div className="recipe-detail-top">
+              <img 
+                src={selectedRecipe.thumbnail} 
+                alt={selectedRecipe.name}
+              />
+              <div>
+                <h3>{selectedRecipe.name}</h3>
+                <p>Categoria: {selectedRecipe.category}</p>
+                <p>Área: {selectedRecipe.area}</p>
+
+                {selectedRecipe.tags.length > 0 && (
+                  <p>Tags: {selectedRecipe.tags.join(", ")}</p>
+                )}
+
+                <h3>Ingredientes:</h3>
+
+                <ul>  
+                  {selectedRecipe.ingredients.map((ingredient) => (
+                    <li key={ingredient.name}>
+                      {ingredient.name} {ingredient.measure}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+                
+            <h3>Modo de preparo</h3>
+            <p>{selectedRecipe.instructions}</p>
+
+              {selectedRecipe.youtube && (
+                <a
+                  href={selectedRecipe.youtube}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Ver vídeo no Youtube.
+                </a>
+              )}
+          </section>  
+        )}
+        
+        {hasNameSearched && (
+          <section id="recipe-results">
+          <h2>Resultados por nome</h2>
+
+          <div className="recipe-grid">
+              {searchResults.map((recipe) => (
+                <RecipeCard 
+                  key={recipe.id} 
+                  recipe={recipe}
+                  onSelect={handleRecipeSelect}
+                />
+              ))}
+          </div>
+          
+          </section>
+        )}
+        
+        {hasIngredientSearched && (
+        <section id="ingredient-results">
+          <h2>Resultados por ingrediente</h2>
+
+          <div className="recipe-grid">
+            {ingredientResults.map((recipe) => (
               <RecipeCard 
                 key={recipe.id} 
                 recipe={recipe}
                 onSelect={handleRecipeSelect}
               />
-            ))}
-        </div>
+          ))}
+          </div>
+          
+          </section> 
+        )}
         
-        </section>
-      )}
-      
-      {hasIngredientSearched && (
-       <section id="ingredient-results">
-        <h2>Resultados por ingrediente</h2>
-
-        <div className="recipe-grid">
-          {ingredientResults.map((recipe) => (
-            <RecipeCard 
-              key={recipe.id} 
-              recipe={recipe}
-              onSelect={handleRecipeSelect}
-            />
-        ))}
-        </div>
-        
-        </section> 
-      )}
-      
-      {recipe && (
-        <section id="random-recipe">
-          <h2>Sugestão aleatória</h2>
-          <h3>{recipe.name}</h3>
-          <p>{recipe.category} {recipe.area}</p>
-          <img src={recipe.thumbnail} alt={recipe.name}/>
-        </section>
-      )}
-    </main>
+        {recipe && (
+          <section id="random-recipe">
+            <h2>Sugestão aleatória</h2>
+            <h3>{recipe.name}</h3>
+            <p>{recipe.category} {recipe.area}</p>
+            <img src={recipe.thumbnail} alt={recipe.name}/>
+          </section>
+        )}
+      </main>
+    </>
   )
 }
+    
+    
 
 export default App

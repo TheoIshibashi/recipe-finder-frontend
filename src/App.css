@@ -86,12 +86,18 @@ form {
 
 #search {
   max-width: 720px;
-  margin: 0 auto 48px;
+  margin: 32px 0 0;
 }
+
 #search form {
   display: flex;
   gap: 8px;
   margin-bottom: 20px;
+}
+
+#search h2,
+#search h3 {
+  color: white;
 }
 
 #search input {
@@ -120,7 +126,56 @@ form {
   cursor: pointer;
 }
 
+.hero {
+  min-height: 420px;
+  background-image: url("assets/images/hero.png");
+  background-size: cover;
+  background-position: center;
+}
 
+.hero-overlay {
+  min-height: 420px;
+  background: linear-gradient(
+    90deg,
+    rgba(27, 20, 16, 0.88)
+    rgba(27, 20, 16, 0.55)
+    rgba(27, 20, 16, 0.15)
+  );
+  display: flex;
+  align-items: center;
+}
+
+.hero-content {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 48px 24px;
+}
+
+.hero h2{
+  max-width: 600px;
+  margin: 12px 0 16px;
+  color: white;
+  font-size: 3.5rem;
+  line-height: 1.05;
+}
+
+.hero h2 span {
+  color: var(--color-accent);
+  font-style: italic;
+  font-weight: 400;
+}
+
+.hero-description {
+  max-width: 560px;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 1.1rem;
+}
+
+.hero-eyebrow {
+  color: var(--color-accent);
+  font-weight: 600;
+}
 
 
 
