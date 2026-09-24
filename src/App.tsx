@@ -19,6 +19,8 @@ function App(){
 
   const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
 
+  const [searchMode, setSearchMode] = useState<"name" | "ingredient">("name")
+
   useEffect(() => {
     setLoading(true);
     setError(null);
@@ -139,6 +141,7 @@ function App(){
     });
   }
 
+
   return(
     <>
       <header className="app-header">
@@ -162,32 +165,59 @@ function App(){
             </p>
 
             <section id="search">
-              <h3>Por nome</h3>
-              <form onSubmit={handleSearch}>
-                <input
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  placeholder="Buscar por nome"
-                />
-                <button type="submit">Buscar</button>
-              </form>
+              <div className="search-mode">
+                <button
+                  type="button"
+                  className={searchMode === "name" ? "active" : ""}
+                  onClick={() => setSearchMode("name")}
+                >
+                  Por nome
+                </button>
 
-              {hasNameSearched && searchResults.length === 0 && (
-                <p>Nenhuma receita encontrada.</p>
-              )}
+                <button
+                  type="button"
+                   className={searchMode === "ingredient" ? "active" : ""}
+                  onClick={() => setSearchMode("ingredient")}
+                >
+                  Por Ingrediente
+                </button>
+              </div>
 
-              <h3>Por ingrediente</h3>
-              <form onSubmit={handleIngredientSearch}>
-                <input
-                  value={ingredientTerm}
-                  onChange={(e) => setIngredientTerm(e.target.value)}
-                  placeholder="Buscar por ingrediente"
-                />
-                <button type="submit">Buscar</button>
-              </form>
+              {searchMode === "name" && (
+                <>
+                  <form onSubmit={handleSearch}>
+                    <input
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      placeholder="Buscar por nome"
+                    />
 
-              {hasIngredientSearched && ingredientResults.length === 0 && (
-                <p>Nenhuma receita encontrada para esse ingrediente.</p>
+                    <button type="submit">Buscar</button>
+                  </form>
+                
+                  {hasNameSearched && searchResults.length === 0 && (
+                    <p>Nenhuma receita encontrada.</p>
+                  )}
+                </>
+               )} 
+              
+
+              {searchMode === "ingredient" && (
+                <>
+                  <form onSubmit={handleIngredientSearch}>
+                    <input
+                      value={ingredientTerm}
+                      onChange={(e) => setIngredientTerm(e.target.value)}
+                      placeholder="Buscar por ingrediente"
+                    />
+
+                    <button type="submit">Buscar</button>
+                  </form>
+
+                  {hasIngredientSearched && ingredientResults.length === 0 && (
+                    <p>Nenhuma receita encontrada para esse ingrediente.</p>
+                  )}
+                </>
               )}
             </section>
           </div>
@@ -195,7 +225,6 @@ function App(){
       </section>
 
       <main>
-        
         {loading && <p>Carregando...</p>}
         {error && <p>Erro: {error}</p>}
 
