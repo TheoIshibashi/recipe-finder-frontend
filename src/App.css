@@ -161,14 +161,14 @@ form {
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 48px 24px;
+  padding: 72px 24px;
 }
 
 .hero h2{
-  max-width: 600px;
+  max-width: 620px;
   margin: 12px 0 16px;
   color: white;
-  font-size: 3.5rem;
+  font-size: 3.75rem;
   line-height: 1.05;
 }
 
@@ -180,13 +180,23 @@ form {
 
 .hero-description {
   max-width: 560px;
+  margin-bottom: 28px;
   color: rgba(255, 255, 255, 0.75);
   font-size: 1.1rem;
+  line-height: 1.6;
 }
 
 .hero-eyebrow {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background-color: rgba(233, 169, 60, 0.16);
+  border: 1px solid rgba(233, 169, 60, 0.35);
   color: var(--color-accent);
+  font-size: 0.75rem;
   font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
 }
 
 
