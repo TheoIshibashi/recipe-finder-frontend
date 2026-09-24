@@ -84,5 +84,43 @@ form {
   }
 }
 
+#search {
+  max-width: 720px;
+  margin: 0 auto 48px;
+}
+#search form {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+#search input {
+  flex: 1;
+  padding: 14px 16px;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background-color: var(--color-surface);
+  font-family: var(--font-body);
+}
+
+#search input:focus{
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(200, 75, 44, 0.15);
+}
+
+#search button{
+  padding: 14px 22px;
+  border: none;
+  border-radius: 12px;
+  background-color: var(--color-primary);
+  color: white;
+  font-family: var(--font-body);
+  font-weight: 500;
+  cursor: pointer;
+}
+
+
+
 
 
