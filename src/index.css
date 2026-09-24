@@ -1,7 +1,33 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --color-bg: #f7f4ef;
+  --color-surface: #ffffff;
+  --color-text: #1b1410;
+  --color-muted: #7a706a;
+  --color-primary: #c84b2c;
+  --color-accent: #e9a93c;
+  --color-border: #ddd8d0;
+
+  --font-display: "Fraunces", Georgia, serif;
+  --font-body: "Outfit", system-ui, sans-serif;
+}
+
 * {
   box-sizing: border-box;
 }
 
 body {
   margin: 0;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
 }
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+}
+
+

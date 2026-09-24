@@ -33,6 +33,8 @@ input {
 
 button {
   cursor: pointer;
+  background-color: var(--color-primary);
+  color: white;
 }
 
 form { 
@@ -81,4 +83,6 @@ form {
     flex-direction: column;
   }
 }
+
+
 
