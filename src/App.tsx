@@ -3,6 +3,8 @@ import type{ Recipe, RecipeSummary, } from "./types/recipe";
 import {RecipeCard} from "./components/RecipeCard";
 import "./App.css";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 
 function App(){
   const [recipe, setRecipe] = useState<Recipe | null>(null);
@@ -25,7 +27,7 @@ function App(){
     setLoading(true);
     setError(null);
 
-    fetch("http://localhost:8000/recipes/random")
+    fetch(`${API_URL}/recipes/random`)
     .then((response) => {
       if (!response.ok){
         throw new Error("Resposta inválida")
@@ -57,7 +59,7 @@ function App(){
     setHasNameSearched(true);
 
     const safeTerm = encodeURIComponent(cleanTerm);
-    const url = `http://localhost:8000/recipes/search?name=${safeTerm}`
+    const url = `${API_URL}/recipes/search?name=${safeTerm}`
 
     setLoading(true);
     setError(null);
@@ -92,7 +94,7 @@ function App(){
     setHasIngredientSearched(true);
 
     const safeTerm = encodeURIComponent(cleanTerm);
-    const url = `http://localhost:8000/recipes/by-ingredient?ingredient=${safeTerm}`
+    const url = `${API_URL}/recipes/by-ingredient?ingredient=${safeTerm}`
 
     setLoading(true);
     setError(null);
@@ -117,7 +119,7 @@ function App(){
   };
 
   const handleRecipeSelect = (recipeId: string) => {
-    const url = `http://localhost:8000/recipes/${recipeId}`;
+    const url = `${API_URL}/recipes/${recipeId}`;
 
     setLoading(true);
     setError(null);
@@ -304,7 +306,6 @@ function App(){
               <p>{ingredientResults.length} receitas encontradas</p>
             </div>
           
-
           <div className="recipe-grid">
             {ingredientResults.map((recipe) => (
               <RecipeCard 

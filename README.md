@@ -96,6 +96,13 @@ http://localhost:5173
 
 The FastAPI backend must also be running for recipe searches and recipe details to work.
 
+### Environment Variables
+
+Create a `.env` file in the project root:
+
+```env
+VITE_API_URL=http://localhost:8000
+
 ## Project Structure
 
 ```text
@@ -154,7 +161,6 @@ The project is currently focused on UI refinement, responsiveness and improving 
 - Improve the hero image and final visual polish
 - Refine the header and results layout
 - Improve accessibility and keyboard navigation
-- Move the backend URL to an environment variable
 - Improve loading states
 - Add frontend tests
 - Prepare the application for deployment
@@ -272,6 +278,13 @@ http://localhost:5173
 
 O backend FastAPI também precisa estar em execução para que as buscas e os detalhes das receitas funcionem.
 
+### Variáveis de ambiente
+
+Crie um arquivo `.env` na raiz do projeto:
+
+```env
+VITE_API_URL=http://localhost:8000
+
 ## Estrutura do projeto
 
 ```text
@@ -330,7 +343,6 @@ No momento, o projeto está focado no refinamento da interface, responsividade e
 - Melhorar a imagem do hero e o acabamento visual final
 - Refinar o header e o layout dos resultados
 - Melhorar acessibilidade e navegação por teclado
-- Mover a URL do backend para uma variável de ambiente
 - Melhorar estados de carregamento
 - Adicionar testes no frontend
 - Preparar a aplicação para deploy
