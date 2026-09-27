@@ -230,8 +230,17 @@ function App(){
       </section>
 
       <main>
-        {loading && <p>Carregando...</p>}
-        {error && <p>Erro: {error}</p>}
+        {loading && (
+          <div className="status-message loading-message">
+            <p>Carregando...</p>
+          </div>
+        )}
+
+        {error && (
+          <div className="status-message error-message">
+            <p>{error}</p>
+          </div>
+        )}
 
 
         {selectedRecipe && (

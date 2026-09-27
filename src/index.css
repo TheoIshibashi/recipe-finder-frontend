@@ -9,6 +9,10 @@
   --color-accent: #e9a93c;
   --color-border: #ddd8d0;
 
+  --color-error-bg: #fff1ed;
+  --color-error-border: #e9b4a7;
+  --color-error-text: #9f321d;
+
   --font-display: "Fraunces", Georgia, serif;
   --font-body: "Outfit", system-ui, sans-serif;
 }
