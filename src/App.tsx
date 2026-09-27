@@ -279,8 +279,11 @@ function App(){
         
         {hasNameSearched && (
           <section id="recipe-results">
-          <h2>Resultados por nome</h2>
-
+            <div className="results-header">
+              <h2>Resultados por nome</h2>
+              <p>{searchResults.length} receitas encontradas</p>
+            </div>
+          
           <div className="recipe-grid">
               {searchResults.map((recipe) => (
                 <RecipeCard 
@@ -296,7 +299,11 @@ function App(){
         
         {hasIngredientSearched && (
         <section id="ingredient-results">
-          <h2>Resultados por ingrediente</h2>
+           <div className="results-header">
+              <h2>Resultados por ingrediente</h2>
+              <p>{ingredientResults.length} receitas encontradas</p>
+            </div>
+          
 
           <div className="recipe-grid">
             {ingredientResults.map((recipe) => (

@@ -1,5 +1,5 @@
 .recipe-card{
-    width: 280px;
+    width: 100%;
     background-color: var(--color-surface);
     border: 1px solid transparent;
     border-radius: 16px;

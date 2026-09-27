@@ -42,9 +42,9 @@ form {
 }
 
 .recipe-grid{
-  display: flex;
-  gap: 16px;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
 }
 
 #recipe-detail {
@@ -230,6 +230,24 @@ form {
 .app-header h1 {
   margin: 0;
   font-size: 1.5rem;
+}
+
+.results-header {
+  margin-bottom: 20px;
+}
+
+.results-header h2 {
+  margin-bottom: 4px;
+}
+
+.results-header p {
+  margin: 0;
+  color: var(--color-muted);
+}
+
+#recipe-results,
+#ingredient-results {
+  margin-top: 32px;
 }
 
 
