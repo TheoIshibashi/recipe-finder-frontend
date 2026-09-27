@@ -199,5 +199,37 @@ form {
   letter-spacing: 0.08em;
 }
 
+.app-header-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 14px 24px;
+}
+
+.app-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.app-brand-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background-color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  transition: transform 0.2s ease;
+}
+
+.app-brand:hover .app-brand-icon {
+  transform: rotate(-4deg) scale(1.05);
+}
+
+.app-header h1 {
+  margin: 0;
+  font-size: 1.5rem;
+}
 
 

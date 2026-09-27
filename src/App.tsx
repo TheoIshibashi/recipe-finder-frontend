@@ -146,7 +146,10 @@ function App(){
     <>
       <header className="app-header">
         <div className="app-header-content">
-          <h1>Recipe Finder</h1>
+          <div className="app-brand">
+            <div className="app-brand-icon">🍳</div>
+            <h1>Recipe Finder</h1>
+          </div>
         </div>
       </header>
 
