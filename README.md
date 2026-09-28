@@ -30,6 +30,8 @@ This repository contains the frontend of the Recipe Finder project. The applicat
 - Vite
 - CSS
 - Fetch API
+- Vitest
+- React Testing Library
 
 ## Backend
 
@@ -102,6 +104,32 @@ Create a `.env` file in the project root:
 
 ```env
 VITE_API_URL=http://localhost:8000
+```
+
+You can use `.env.example` as a reference.
+
+The `VITE_API_URL` variable defines the base URL used by the frontend to communicate with the FastAPI backend.
+
+## Tests
+
+The frontend uses Vitest and React Testing Library for component and integration tests.
+
+Run tests in watch mode:
+
+```bash
+npm test
+```
+
+Run all tests once: 
+
+```bash
+npm run test:run
+```
+
+Current tests cover:
+- Recipe card rendering
+- Recipe selection interaction
+- Random recipe loading
 
 ## Project Structure
 
@@ -110,12 +138,15 @@ src/
 ├── assets/
 │   └── images/
 ├── components/
-│   └── RecipeCard.tsx
+│   ├── RecipeCard.tsx
+│   └── RecipeCard.test.tsx
 ├── types/
 │   └── recipe.ts
 ├── App.tsx
+├── App.test.tsx
 ├── App.css
 ├── index.css
+├── setupTests.ts
 └── main.tsx
 ```
 
@@ -126,6 +157,9 @@ src/
 - `recipe.ts`: TypeScript types used by recipe data
 - `App.css`: page layout and application-specific styles
 - `index.css`: global styles, colors and typography
+- `App.test.tsx`: tests the main application flows
+- `RecipeCard.test.tsx`: tests recipe card rendering and interaction
+- `setupTests.ts`: configures the frontend test environment
 
 ## Design
 
@@ -162,8 +196,8 @@ The project is currently focused on UI refinement, responsiveness and improving 
 - Refine the header and results layout
 - Improve accessibility and keyboard navigation
 - Improve loading states
-- Add frontend tests
 - Prepare the application for deployment
+- Expand frontend test coverage
 
 ## Related Repository
 
@@ -212,6 +246,8 @@ Este repositório contém o frontend do projeto Recipe Finder. A aplicação se 
 - Vite
 - CSS
 - Fetch API
+- Vitest
+- React Testing Library
 
 ## Backend
 
@@ -284,6 +320,32 @@ Crie um arquivo `.env` na raiz do projeto:
 
 ```env
 VITE_API_URL=http://localhost:8000
+```
+
+Você pode usar o arquivo `.env.example` como referência.
+
+A variável `VITE_API_URL` define a URL base utilizada pelo frontend para se comunicar com o backend FastAPI.
+
+## Testes
+
+O frontend utiliza Vitest e React Testing Library para testes de componentes e integração.
+
+Execute os testes em modo watch:
+
+```bash
+npm test
+```
+
+Execute todos os testes uma vez:
+
+```bash
+npm run test:run
+```
+Os testes atuais cobrem:
+
+- Renderização do card de receita
+- Interação de seleção da receita
+- Carregamento da receita aleatória
 
 ## Estrutura do projeto
 
@@ -292,12 +354,15 @@ src/
 ├── assets/
 │   └── images/
 ├── components/
-│   └── RecipeCard.tsx
+│   ├── RecipeCard.tsx
+│   └── RecipeCard.test.tsx
 ├── types/
 │   └── recipe.ts
 ├── App.tsx
+├── App.test.tsx
 ├── App.css
 ├── index.css
+├── setupTests.ts
 └── main.tsx
 ```
 
@@ -308,6 +373,9 @@ src/
 - `recipe.ts`: tipos TypeScript utilizados pelos dados das receitas
 - `App.css`: layout da página e estilos específicos da aplicação
 - `index.css`: estilos globais, cores e tipografia
+- `App.test.tsx`: testa os principais fluxos da aplicação
+- `RecipeCard.test.tsx`: testa a renderização e interação do card de receita
+- `setupTests.ts`: configura o ambiente de testes do frontend
 
 ## Design
 
@@ -317,7 +385,7 @@ A interface utiliza uma identidade visual com foco em culinária, incluindo:
 - Outfit para interface e textos
 - Terracota como cor principal
 - Fundos neutros e quentes
-- Cards responsivos
+- Cards de receita responsivos
 - Hero section com a busca integrada
 
 A interface ainda está sendo refinada conforme o projeto evolui.
@@ -343,9 +411,9 @@ No momento, o projeto está focado no refinamento da interface, responsividade e
 - Melhorar a imagem do hero e o acabamento visual final
 - Refinar o header e o layout dos resultados
 - Melhorar acessibilidade e navegação por teclado
-- Melhorar estados de carregamento
-- Adicionar testes no frontend
+- Melhorar os estados de carregamento
 - Preparar a aplicação para deploy
+- Expandir a cobertura de testes do frontend
 
 ## Repositório relacionado
 
