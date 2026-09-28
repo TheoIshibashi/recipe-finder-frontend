@@ -127,9 +127,12 @@ npm run test:run
 ```
 
 Current tests cover:
+
 - Recipe card rendering
 - Recipe selection interaction
 - Random recipe loading
+- Recipe search by name
+- Recipe search by ingredient
 
 ## Project Structure
 
@@ -346,6 +349,8 @@ Os testes atuais cobrem:
 - Renderização do card de receita
 - Interação de seleção da receita
 - Carregamento da receita aleatória
+- Busca de receitas por nome
+- Busca de receitas por ingrediente
 
 ## Estrutura do projeto
 
