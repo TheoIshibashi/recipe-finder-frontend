@@ -2,9 +2,6 @@ import {render, screen} from "@testing-library/react"
 import userEvent from "@testing-library/user-event";
 import {beforeEach, expect, it, vi} from "vitest"
 import App from "./App"
-import { jsx } from "react/jsx-runtime";
-import { useReducer } from "react";
-import { input } from "@testing-library/user-event/dist/cjs/event/input.js";
 
 const mockRecipe = {
   id: "123",
