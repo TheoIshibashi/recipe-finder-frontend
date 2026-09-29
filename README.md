@@ -133,6 +133,7 @@ Current tests cover:
 - Random recipe loading
 - Recipe search by name
 - Recipe search by ingredient
+- Recipe detail selection
 
 ## Project Structure
 
@@ -351,6 +352,7 @@ Os testes atuais cobrem:
 - Carregamento da receita aleatória
 - Busca de receitas por nome
 - Busca de receitas por ingrediente
+- Seleção e exibição dos detalhes da receita
 
 ## Estrutura do projeto
 

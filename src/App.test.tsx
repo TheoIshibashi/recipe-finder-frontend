@@ -2,6 +2,7 @@ import {render, screen} from "@testing-library/react"
 import userEvent from "@testing-library/user-event";
 import {beforeEach, expect, it, vi} from "vitest"
 import App from "./App"
+import { RecipeCard } from "./components/RecipeCard";
 
 const mockRecipe = {
   id: "123",
@@ -38,6 +39,23 @@ id: "789",
   thumbnail: "https://example.com/chicken-salad.jpg",
 };
 
+const selectedRecipe = {
+  id: "3",
+  name: "Selected Recipe",
+  category: "Test Category",
+  area: "Test Area",
+  instructions: "Selected recipe instructions",
+  thumbnail: "https://example.com/image.jpg",
+  youtube: "",
+  tags: [],
+  ingredients: [
+    {
+      name: "Ingredient 1",
+      measure: "1 cup",
+    },
+  ],
+};
+
 
 beforeEach(() => {
   vi.restoreAllMocks();
@@ -70,10 +88,10 @@ it("searches recipes by name", async () => {
   render(<App />);
 
     const input = screen.getByPlaceholderText('Buscar por nome')
-    const button = screen.getByRole("button", {name: "Buscar"})
+    const searchButton = screen.getByRole("button", {name: "Buscar"})
 
     await user.type(input, "Chicken");
-    await user.click(button);
+    await user.click(searchButton);
 
     expect(
         await screen.findByText(`Nome da Receita: ${searchRecipe.name}`)
@@ -117,3 +135,46 @@ it("searches recipes by ingredient", async () => {
         "http://localhost:8000/recipes/by-ingredient?ingredient=Chicken"
     );
 });
+
+it("shows recipe details when selecting a recipe", async () => {
+  const fetchMock = vi.spyOn(globalThis, "fetch")
+    .mockResolvedValueOnce({
+      ok: true,
+      json: async() => mockRecipe,
+    } as Response)
+    .mockResolvedValueOnce({
+      ok: true,
+      json: async () => [searchRecipe],
+    }as Response)
+    .mockResolvedValueOnce({
+      ok: true,
+      json: async () => selectedRecipe,
+    }as Response);
+
+    const user = userEvent.setup();
+
+    render(<App />)
+
+    const input = screen.getByPlaceholderText('Buscar por nome')
+    const searchButton = screen.getByRole("button", {name: "Buscar"})
+
+    await user.type(input, "Chicken");
+    await user.click(searchButton);
+
+    const detailsButton = await screen.findByRole("button", {
+      name: "Ver Detalhes",
+    });
+
+    await user.click(detailsButton);
+    screen.debug();
+
+    expect(
+      await screen.findByRole("heading", {
+        name: selectedRecipe.name,
+      })
+    ).toBeInTheDocument();
+    expect(fetchMock).toHaveBeenNthCalledWith(
+      3,
+      `http://localhost:8000/recipes/${searchRecipe.id}`
+    );
+})
