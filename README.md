@@ -134,6 +134,8 @@ Current tests cover:
 - Recipe search by name
 - Recipe search by ingredient
 - Recipe detail selection
+- No-result search state
+- Empty search validation
 
 ## Project Structure
 
@@ -353,6 +355,8 @@ Os testes atuais cobrem:
 - Busca de receitas por nome
 - Busca de receitas por ingrediente
 - Seleção e exibição dos detalhes da receita
+- Estado de busca sem resultados
+- Validação de busca vazia
 
 ## Estrutura do projeto
 

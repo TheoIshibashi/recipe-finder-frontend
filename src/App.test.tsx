@@ -1,8 +1,7 @@
-import {render, screen} from "@testing-library/react"
+import {queryByText, render, screen} from "@testing-library/react"
 import userEvent from "@testing-library/user-event";
 import {beforeEach, expect, it, vi} from "vitest"
 import App from "./App"
-import { RecipeCard } from "./components/RecipeCard";
 
 const mockRecipe = {
   id: "123",
@@ -177,4 +176,52 @@ it("shows recipe details when selecting a recipe", async () => {
       3,
       `http://localhost:8000/recipes/${searchRecipe.id}`
     );
-})
+});
+
+it("shows a message when no recipe are found", async () => {
+  vi.spyOn(globalThis, "fetch")
+    .mockResolvedValueOnce({
+        ok: true,
+        json: async () => mockRecipe,
+    }as Response).mockResolvedValueOnce({
+        ok: true,
+        json: async () => [],
+    } as Response);
+
+  const user = userEvent.setup();
+
+  render(<App />);
+
+    const input = screen.getByPlaceholderText('Buscar por nome')
+    const searchButton = screen.getByRole("button", {name: "Buscar"})
+
+    await user.type(input, "Chicken");
+    await user.click(searchButton);
+
+    expect(
+      await screen.findByText("Nenhuma receita encontrada.")
+    ).toBeInTheDocument();
+
+});
+
+it("shows an error when searching with an empty name", async () => {
+  const fetchMock = vi.spyOn(globalThis, "fetch")
+    .mockResolvedValueOnce({
+      ok: true,
+      json: async () => mockRecipe,
+    } as Response);
+
+  const user = userEvent.setup();
+
+  render(<App />)
+
+  const searchButton = screen.getByRole("button", {name: "Buscar"})
+  await user.click(searchButton)
+
+  expect(
+    await screen.findByText("Digite um nome para buscar.")
+  ).toBeInTheDocument();
+  expect(fetchMock).toHaveBeenCalledTimes(
+    1,
+  )
+});
