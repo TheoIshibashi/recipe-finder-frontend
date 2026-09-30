@@ -200,7 +200,6 @@ it("shows a message when no recipe are found", async () => {
     expect(
       await screen.findByText("Nenhuma receita encontrada.")
     ).toBeInTheDocument();
-
 });
 
 it("shows an error when searching with an empty name", async () => {
@@ -285,5 +284,67 @@ it("shows an error when loading recipe details fails", async () => {
     expect(fetchMock).toHaveBeenNthCalledWith(
       3,
       `http://localhost:8000/recipes/${searchRecipe.id}`
+    );
+});
+
+it("shows a message when no recipes are found by ingredient", async () => {
+  const fetchMock = vi.spyOn(globalThis, "fetch")
+    .mockResolvedValueOnce({
+        ok: true,
+        json: async () => mockRecipe,
+    }as Response).mockResolvedValueOnce({
+        ok: true,
+        json: async () => [],
+    } as Response);
+
+  const user = userEvent.setup();
+
+  render(<App />);
+
+    const ingredientModeButton = screen.getByRole("button", {
+        name: "Por Ingrediente",
+    });
+
+    await user.click(ingredientModeButton);
+    const input = screen.getByPlaceholderText('Buscar por ingrediente')
+    const button = screen.getByRole("button", {name: "Buscar"})
+
+    await user.type(input, "Chicken");
+    await user.click(button);
+
+    expect(
+        await screen.findByText("Nenhuma receita encontrada para esse ingrediente.")
+    ).toBeInTheDocument();
+    expect(fetchMock).toHaveBeenNthCalledWith(
+        2, 
+        "http://localhost:8000/recipes/by-ingredient?ingredient=Chicken"
+    );
+});
+
+it("shows an error when searching with an empty ingredient", async () => {
+  const fetchMock = vi.spyOn(globalThis, "fetch")
+    .mockResolvedValueOnce({
+        ok: true,
+        json: async () => mockRecipe,
+    }as Response);
+
+  const user = userEvent.setup();
+
+  render(<App />);
+
+    const ingredientModeButton = screen.getByRole("button", {
+        name: "Por Ingrediente",
+    });
+
+    await user.click(ingredientModeButton);
+    const button = screen.getByRole("button", {name: "Buscar"})
+
+    await user.click(button);
+
+    expect(
+        await screen.findByText("Digite um ingrediente para buscar.")
+    ).toBeInTheDocument();
+    expect(fetchMock).toHaveBeenCalledTimes(
+        1,
     );
 });
