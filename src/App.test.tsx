@@ -1,4 +1,4 @@
-import {queryByText, render, screen} from "@testing-library/react"
+import {render, screen} from "@testing-library/react"
 import userEvent from "@testing-library/user-event";
 import {beforeEach, expect, it, vi} from "vitest"
 import App from "./App"
@@ -225,3 +225,27 @@ it("shows an error when searching with an empty name", async () => {
     1,
   )
 });
+
+it("shows an error when the name search request fails", async () => {
+  vi.spyOn(globalThis, "fetch")
+    .mockResolvedValueOnce({
+      ok: true,
+      json: async () => mockRecipe,
+    } as Response).mockResolvedValueOnce({
+      ok: false,
+    }as Response);
+
+    const user = userEvent.setup();
+
+    render(<App />)
+
+    const input = screen.getByPlaceholderText('Buscar por nome');
+    const searchButton = screen.getByRole("button", {name: "Buscar"});
+
+    await user.type(input, "Chicken");
+    await user.click(searchButton);
+
+    expect(
+      await screen.findByText("Ocorreu um erro inesperado.")
+    ).toBeInTheDocument();
+})
