@@ -24,9 +24,6 @@ function App(){
   const [searchMode, setSearchMode] = useState<"name" | "ingredient">("name")
 
   useEffect(() => {
-    setLoading(true);
-    setError(null);
-
     fetch(`${API_URL}/recipes/random`)
     .then((response) => {
       if (!response.ok){
