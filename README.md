@@ -136,6 +136,8 @@ Current tests cover:
 - Recipe detail selection
 - No-result search state
 - Empty search validation
+- API error handling during recipe search
+- API error handling when loading recipe details
 
 ## Project Structure
 
@@ -357,6 +359,8 @@ Os testes atuais cobrem:
 - Seleção e exibição dos detalhes da receita
 - Estado de busca sem resultados
 - Validação de busca vazia
+- Tratamento de erro da API durante a busca de receitas
+- Tratamento de erro da API ao carregar detalhes da receita
 
 ## Estrutura do projeto
 

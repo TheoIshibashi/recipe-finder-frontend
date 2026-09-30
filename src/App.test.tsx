@@ -165,7 +165,6 @@ it("shows recipe details when selecting a recipe", async () => {
     });
 
     await user.click(detailsButton);
-    screen.debug();
 
     expect(
       await screen.findByRole("heading", {
@@ -248,4 +247,43 @@ it("shows an error when the name search request fails", async () => {
     expect(
       await screen.findByText("Ocorreu um erro inesperado.")
     ).toBeInTheDocument();
-})
+});
+
+it("shows an error when loading recipe details fails", async () => {
+  const fetchMock = vi.spyOn(globalThis, "fetch")
+    .mockResolvedValueOnce({
+      ok: true,
+      json: async() => mockRecipe,
+    } as Response)
+    .mockResolvedValueOnce({
+      ok: true,
+      json: async () => [searchRecipe],
+    }as Response)
+    .mockResolvedValueOnce({
+      ok: false,
+    }as Response);
+
+    const user = userEvent.setup();
+
+    render(<App />)
+
+    const input = screen.getByPlaceholderText('Buscar por nome')
+    const searchButton = screen.getByRole("button", {name: "Buscar"})
+
+    await user.type(input, "Chicken");
+    await user.click(searchButton);
+
+    const detailsButton = await screen.findByRole("button", {
+      name: "Ver Detalhes",
+    });
+
+    await user.click(detailsButton);
+
+    expect(
+      await screen.findByText("Ocorreu um erro inesperado.")
+    ).toBeInTheDocument();
+    expect(fetchMock).toHaveBeenNthCalledWith(
+      3,
+      `http://localhost:8000/recipes/${searchRecipe.id}`
+    );
+});
