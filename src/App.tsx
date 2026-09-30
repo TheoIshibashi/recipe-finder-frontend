@@ -326,18 +326,22 @@ function App(){
         )}
         
         {recipe && (
-          <section id="random-recipe">
-            <h2>Sugestão aleatória</h2>
-            <h3>{recipe.name}</h3>
-            <p>{recipe.category} {recipe.area}</p>
+          <section id="random-recipe" aria-labelledby="random-recipe-title">
             <img src={recipe.thumbnail} alt={recipe.name}/>
+
+            <div className="random-recipe-content">
+              <h2 id="random-recipe-title">Sugestão aleatória</h2>
+              <h3>{recipe.name}</h3>
+              <p>{recipe.category} • {recipe.area}</p>
+              <button type="button" onClick={() => handleRecipeSelect(recipe.id)}>
+                Ver Detalhes
+              </button>
+            </div>
           </section>
         )}
       </main>
     </>
   )
 }
-    
-    
 
 export default App
