@@ -13,15 +13,16 @@ function App(){
 
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [searchResults, setSearchResults] = useState<Recipe[]>([]);
-  const [hasNameSearched, setHasNameSearched] = useState<boolean>(false)
+  const [hasNameSearched, setHasNameSearched] = useState<boolean>(false);
 
   const[ingredientTerm, setIngredientTerm] = useState<string>("");
   const[ingredientResults, setIngredientResults] = useState<RecipeSummary[]>([]);
-  const[hasIngredientSearched, setHasIngredientSearched] = useState<boolean>(false)
+  const[hasIngredientSearched, setHasIngredientSearched] = useState<boolean>(false);
 
   const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
+  const [searchMode, setSearchMode] = useState<"name" | "ingredient">("name");
 
-  const [searchMode, setSearchMode] = useState<"name" | "ingredient">("name")
+  const [detailsLoading, setDetailsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     fetch(`${API_URL}/recipes/random`)
@@ -118,7 +119,7 @@ function App(){
   const handleRecipeSelect = (recipeId: string) => {
     const url = `${API_URL}/recipes/${recipeId}`;
 
-    setLoading(true);
+    setDetailsLoading(true);
     setError(null);
 
     fetch(url)
@@ -136,7 +137,7 @@ function App(){
       setError("Ocorreu um erro inesperado.")
     })
     .finally(() =>{
-      setLoading(false);
+      setDetailsLoading(false);
     });
   }
 
@@ -239,7 +240,14 @@ function App(){
           </div>
         )}
 
-
+        {detailsLoading && (
+          <div className="status-message loading-message">
+            <p className="loading-text">
+              <span className="loading-spinner"></span>
+              Carregando detalhes da receita...
+            </p>
+          </div>
+        )}
         {selectedRecipe && (
           <section id="recipe-detail">
             <h2>Detalhes da receita</h2>
@@ -326,7 +334,11 @@ function App(){
         )}
         
         {recipe && (
-          <section id="random-recipe" aria-labelledby="random-recipe-title">
+          <section 
+            id="random-recipe" 
+            aria-labelledby="random-recipe-title"
+          >
+            
             <img src={recipe.thumbnail} alt={recipe.name}/>
 
             <div className="random-recipe-content">
