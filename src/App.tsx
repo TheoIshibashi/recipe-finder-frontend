@@ -23,6 +23,7 @@ function App(){
   const [searchMode, setSearchMode] = useState<"name" | "ingredient">("name");
 
   const [detailsLoading, setDetailsLoading] = useState<boolean>(false);
+  const [detailsError, setDetailsError] = useState<string | null>(null);
 
   useEffect(() => {
     fetch(`${API_URL}/recipes/random`)
@@ -120,8 +121,9 @@ function App(){
     const url = `${API_URL}/recipes/${recipeId}`;
 
     setDetailsLoading(true);
-    setError(null);
+    setDetailsError(null);
 
+    setSelectedRecipe(null);
     fetch(url)
     .then((response) => {
       if (!response.ok){
@@ -134,7 +136,7 @@ function App(){
       setSelectedRecipe(data)
     })
     .catch(() =>{
-      setError("Ocorreu um erro inesperado.")
+      setDetailsError("Ocorreu um erro inesperado.")
     })
     .finally(() =>{
       setDetailsLoading(false);
@@ -246,6 +248,11 @@ function App(){
               <span className="loading-spinner"></span>
               Carregando detalhes da receita...
             </p>
+          </div>
+        )}
+        {detailsError && (
+          <div className="status-message error-message">
+            <p>{detailsError}</p>
           </div>
         )}
         {selectedRecipe && (
