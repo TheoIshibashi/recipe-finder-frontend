@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import type{ Recipe, RecipeSummary, } from "./types/recipe";
 import {RecipeCard} from "./components/RecipeCard";
 import "./App.css";
+import { SearchSection} from "./components/SearchSection";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -172,62 +173,20 @@ function App(){
               Busque por nome ou ingrediente e descubra sua próxima receita favorita.
             </p>
 
-            <section id="search">
-              <div className="search-mode">
-                <button
-                  type="button"
-                  className={searchMode === "name" ? "active" : ""}
-                  onClick={() => setSearchMode("name")}
-                >
-                  Por nome
-                </button>
-
-                <button
-                  type="button"
-                   className={searchMode === "ingredient" ? "active" : ""}
-                  onClick={() => setSearchMode("ingredient")}
-                >
-                  Por Ingrediente
-                </button>
-              </div>
-
-              {searchMode === "name" && (
-                <>
-                  <form onSubmit={handleSearch}>
-                    <input
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                      placeholder="Buscar por nome"
-                    />
-
-                    <button type="submit">Buscar</button>
-                  </form>
-                
-                  {hasNameSearched && searchResults.length === 0 && (
-                    <p>Nenhuma receita encontrada.</p>
-                  )}
-                </>
-               )} 
-              
-
-              {searchMode === "ingredient" && (
-                <>
-                  <form onSubmit={handleIngredientSearch}>
-                    <input
-                      value={ingredientTerm}
-                      onChange={(e) => setIngredientTerm(e.target.value)}
-                      placeholder="Buscar por ingrediente"
-                    />
-
-                    <button type="submit">Buscar</button>
-                  </form>
-
-                  {hasIngredientSearched && ingredientResults.length === 0 && (
-                    <p>Nenhuma receita encontrada para esse ingrediente.</p>
-                  )}
-                </>
-              )}
-            </section>
+            <SearchSection 
+              searchMode={searchMode}
+              setSearchMode={setSearchMode}
+              searchTerm={searchTerm}
+              setSearchTerm={setSearchTerm}
+              handleSearch={handleSearch}
+              hasNameSearched={hasNameSearched}
+              searchResultsCount={searchResults.length}
+              ingredientTerm={ingredientTerm}
+              setIngredientTerm={setIngredientTerm}
+              handleIngredientSearch={handleIngredientSearch}
+              hasIngredientSearched={hasIngredientSearched}
+              ingredientResultsCount={ingredientResults.length}
+            />
           </div>
         </div>
       </section>
@@ -347,7 +306,7 @@ function App(){
           <div className="status-message loading-message">
             <p className="loading-text">
               <span className="loading-spinner"></span>
-              Carregando receita aleatória...
+              Carregando sugestão aleatória...
             </p>
           </div>
         )}
