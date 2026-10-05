@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import type{ Recipe, RecipeSummary, } from "./types/recipe";
-import {RecipeCard} from "./components/RecipeCard";
 import "./App.css";
-import { SearchSection} from "./components/SearchSection";
+import {SearchSection} from "./components/SearchSection";
+import {RecipeResults} from "./components/RecipeResults";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -263,43 +263,21 @@ function App(){
         )}
         
         {hasNameSearched && (
-          <section id="recipe-results">
-            <div className="results-header">
-              <h2>Resultados por nome</h2>
-              <p>{searchResults.length} receitas encontradas</p>
-            </div>
-          
-          <div className="recipe-grid">
-              {searchResults.map((recipe) => (
-                <RecipeCard 
-                  key={recipe.id} 
-                  recipe={recipe}
-                  onSelect={handleRecipeSelect}
-                />
-              ))}
-          </div>
-          
-          </section>
+          <RecipeResults 
+            title="Resultados por nome"
+            sectionId="name-results"
+            recipes={searchResults}
+            onSelect={handleRecipeSelect}
+          />
         )}
         
         {hasIngredientSearched && (
-        <section id="ingredient-results">
-           <div className="results-header">
-              <h2>Resultados por ingrediente</h2>
-              <p>{ingredientResults.length} receitas encontradas</p>
-            </div>
-          
-          <div className="recipe-grid">
-            {ingredientResults.map((recipe) => (
-              <RecipeCard 
-                key={recipe.id} 
-                recipe={recipe}
-                onSelect={handleRecipeSelect}
-              />
-          ))}
-          </div>
-          
-          </section> 
+          <RecipeResults
+            title="Resultados por ingrediente"
+            sectionId="ingredient-results"
+            recipes={ingredientResults}
+            onSelect={handleRecipeSelect}
+          />
         )}
         
         {randomLoading && (

@@ -41,10 +41,3 @@
     color: white;
     border-color: var(--color-primary);
 }
-
-
-.recipe-grid {
-    display: flex;
-    gap: 16px;
-    flex-wrap: wrap;
-}
