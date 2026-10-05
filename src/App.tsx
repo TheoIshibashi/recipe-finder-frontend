@@ -8,8 +8,8 @@ const API_URL = import.meta.env.VITE_API_URL;
 
 function App(){
   const [recipe, setRecipe] = useState<Recipe | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+  const [randomLoading, setRandomLoading] = useState<boolean>(true);
+  const [randomError, setRandomError] = useState<string | null>(null);
 
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [searchResults, setSearchResults] = useState<Recipe[]>([]);
@@ -21,6 +21,9 @@ function App(){
 
   const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
   const [searchMode, setSearchMode] = useState<"name" | "ingredient">("name");
+
+  const [searchLoading, setSearchLoading] = useState(false)
+  const [searchError, setSearchError] = useState<string | null>(null);
 
   const [detailsLoading, setDetailsLoading] = useState<boolean>(false);
   const [detailsError, setDetailsError] = useState<string | null>(null);
@@ -38,10 +41,10 @@ function App(){
       setRecipe(data)
     })
     .catch(() =>{
-      setError("Ocorreu um erro inesperado.")
+      setRandomError("Ocorreu um erro inesperado.")
     })
     .finally(() =>{
-      setLoading(false);
+      setRandomLoading(false);
     })
   }, []);
 
@@ -51,7 +54,7 @@ function App(){
 
     const cleanTerm = searchTerm.trim();
     if (!cleanTerm){
-      setError("Digite um nome para buscar.");
+      setSearchError("Digite um nome para buscar.");
       return;
     }
 
@@ -60,8 +63,8 @@ function App(){
     const safeTerm = encodeURIComponent(cleanTerm);
     const url = `${API_URL}/recipes/search?name=${safeTerm}`
 
-    setLoading(true);
-    setError(null);
+    setSearchLoading(true);
+    setSearchError(null);
 
     fetch(url)
     .then((response) => {
@@ -75,10 +78,10 @@ function App(){
       setSearchResults(data)
     })
     .catch(() =>{
-      setError("Ocorreu um erro inesperado.")
+      setSearchError("Ocorreu um erro inesperado.")
     })
     .finally(() =>{
-      setLoading(false);
+      setSearchLoading(false);
     });
   };
 
@@ -86,7 +89,7 @@ function App(){
     event.preventDefault();
     const cleanTerm = ingredientTerm.trim();
     if (!cleanTerm){
-      setError("Digite um ingrediente para buscar.");
+      setSearchError("Digite um ingrediente para buscar.");
       return;
     }
 
@@ -95,8 +98,8 @@ function App(){
     const safeTerm = encodeURIComponent(cleanTerm);
     const url = `${API_URL}/recipes/by-ingredient?ingredient=${safeTerm}`
 
-    setLoading(true);
-    setError(null);
+    setSearchLoading(true);
+    setSearchError(null);
 
     fetch(url)
     .then((response) => {
@@ -110,10 +113,10 @@ function App(){
       setIngredientResults(data)
     })
     .catch(() =>{
-      setError("Ocorreu um erro inesperado.")
+      setSearchError("Ocorreu um erro inesperado.")
     })
     .finally(() =>{
-      setLoading(false);
+      setSearchLoading(false);
     });
   };
 
@@ -230,15 +233,15 @@ function App(){
       </section>
 
       <main>
-        {loading && (
+        {searchLoading && (
           <div className="status-message loading-message">
-            <p>Carregando...</p>
+            <p>Buscando receitas...</p>
           </div>
         )}
 
-        {error && (
+        {searchError && (
           <div className="status-message error-message">
-            <p>{error}</p>
+            <p>{searchError}</p>
           </div>
         )}
 
@@ -340,6 +343,19 @@ function App(){
           </section> 
         )}
         
+        {randomLoading && (
+          <div className="status-message loading-message">
+            <p className="loading-text">
+              <span className="loading-spinner"></span>
+              Carregando receita aleatória...
+            </p>
+          </div>
+        )}
+        {randomError && (
+          <div className="status-message error-message">
+            <p>{randomError}</p>
+          </div>
+        )}
         {recipe && (
           <section 
             id="random-recipe" 
