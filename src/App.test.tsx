@@ -491,3 +491,16 @@ it("shows an error when the ingredient search request fails", async () => {
     ).toBeInTheDocument();
     expect(screen.queryByText("Nenhuma receita encontrada para esse ingrediente.")).not.toBeInTheDocument();
 });
+
+it("shows an error when loading the random recipe fails", async () => {
+  vi.spyOn(globalThis, "fetch")
+    .mockResolvedValueOnce({
+      ok: false,
+    } as Response);
+
+    render(<App />);
+
+    expect(
+      await screen.findByText("Ocorreu um erro inesperado.")
+    ).toBeInTheDocument();
+})
