@@ -181,6 +181,8 @@ function App(){
               handleSearch={handleSearch}
               hasNameSearched={hasNameSearched}
               searchResultsCount={searchResults.length}
+              searchLoading={searchLoading}
+              searchError={searchError}
               ingredientTerm={ingredientTerm}
               setIngredientTerm={setIngredientTerm}
               handleIngredientSearch={handleIngredientSearch}

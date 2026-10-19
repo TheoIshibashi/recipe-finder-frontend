@@ -77,7 +77,7 @@ it("searches recipes by name", async () => {
     .mockResolvedValueOnce({
         ok: true,
         json: async () => mockRecipe,
-    }as Response).mockResolvedValueOnce({
+    } as Response).mockResolvedValueOnce({
         ok: true,
         json: async () => [searchRecipe],
     } as Response);
@@ -106,7 +106,7 @@ it("searches recipes by ingredient", async () => {
     .mockResolvedValueOnce({
         ok: true,
         json: async () => mockRecipe,
-    }as Response).mockResolvedValueOnce({
+    } as Response).mockResolvedValueOnce({
         ok: true,
         json: async () => [ingredientRecipe],
     } as Response);
@@ -144,11 +144,11 @@ it("shows recipe details when selecting a recipe", async () => {
     .mockResolvedValueOnce({
       ok: true,
       json: async () => [searchRecipe],
-    }as Response)
+    } as Response)
     .mockResolvedValueOnce({
       ok: true,
       json: async () => selectedRecipe,
-    }as Response);
+    } as Response);
 
     const user = userEvent.setup();
 
@@ -191,7 +191,7 @@ it("shows a message when no recipe are found", async () => {
     .mockResolvedValueOnce({
         ok: true,
         json: async () => mockRecipe,
-    }as Response).mockResolvedValueOnce({
+    } as Response).mockResolvedValueOnce({
         ok: true,
         json: async () => [],
     } as Response);
@@ -240,13 +240,13 @@ it("shows an error when the name search request fails", async () => {
       json: async () => mockRecipe,
     } as Response).mockResolvedValueOnce({
       ok: false,
-    }as Response);
+    } as Response);
 
     const user = userEvent.setup();
 
     render(<App />)
 
-    const input = screen.getByPlaceholderText('Buscar por nome');
+    const input = screen.getByPlaceholderText('Buscar por nome'); 
     const searchButton = screen.getByRole("button", {name: "Buscar"});
 
     await user.type(input, "Chicken");
@@ -255,6 +255,7 @@ it("shows an error when the name search request fails", async () => {
     expect(
       await screen.findByText("Ocorreu um erro inesperado.")
     ).toBeInTheDocument();
+    expect(screen.queryByText("Nenhuma receita encontrada.")).not.toBeInTheDocument();
 });
 
 it("shows an error when loading recipe details fails", async () => {
@@ -266,10 +267,10 @@ it("shows an error when loading recipe details fails", async () => {
     .mockResolvedValueOnce({
       ok: true,
       json: async () => [searchRecipe],
-    }as Response)
+    } as Response)
     .mockResolvedValueOnce({
       ok: false,
-    }as Response);
+    } as Response);
 
     const user = userEvent.setup();
 
@@ -311,7 +312,7 @@ it("shows a message when no recipes are found by ingredient", async () => {
     .mockResolvedValueOnce({
         ok: true,
         json: async () => mockRecipe,
-    }as Response).mockResolvedValueOnce({
+    } as Response).mockResolvedValueOnce({
         ok: true,
         json: async () => [],
     } as Response);
@@ -345,7 +346,7 @@ it("shows an error when searching with an empty ingredient", async () => {
     .mockResolvedValueOnce({
         ok: true,
         json: async () => mockRecipe,
-    }as Response);
+    } as Response);
 
   const user = userEvent.setup();
 
@@ -373,7 +374,7 @@ it("shows details for the random recipe", async () => {
     .mockResolvedValueOnce({
       ok: true,
       json: async () => mockRecipe,
-    }as Response).mockResolvedValueOnce({
+    } as Response).mockResolvedValueOnce({
       ok: true,
       json: async () => selectedRecipe,
     }as Response);
@@ -402,49 +403,60 @@ it("shows details for the random recipe", async () => {
     )
 })
 
-it("shows an error when loading recipe details fails", async () => {
-  const fetchMock = vi.spyOn(globalThis, "fetch")
-    .mockResolvedValueOnce({
-      ok: true,
-      json: async() => mockRecipe,
-    }as Response).mockResolvedValueOnce({
-      ok: true,
-      json: async () => [searchRecipe],
-    }as Response).mockResolvedValueOnce({
-      ok: false,
-    }as Response);
+it("does not show empty results while searching by name", async() =>{
+  vi.spyOn(globalThis, "fetch")
+  .mockResolvedValueOnce({
+    ok: true,
+    json: async () => mockRecipe,
+  } as Response).mockImplementationOnce(() => {
+    return new Promise<Response>(() => {});
+  })
 
-    const user = userEvent.setup();
+  const user = userEvent.setup();
 
-    render(<App />)
+  render(<App />)
 
-    const input = screen.getByPlaceholderText("Buscar por nome")
-    const searchButton = screen.getByRole("button", {name: "Buscar"})
-    
-    await user.type(input, "Chicken");
-    await user.click(searchButton);
+  const input = screen.getByPlaceholderText('Buscar por nome')
+  const searchButton = screen.getByRole("button", {name: "Buscar"})
 
-    const resultsHeading = await screen.findByRole("heading", {
-      name: "Resultados por nome",
-    });
+  await user.type(input, "Chicken");
+  await user.click(searchButton);
 
-    const resultsSection = resultsHeading.closest("section");
+  expect(screen.queryByText("Nenhuma receita encontrada.")
+    ).not.toBeInTheDocument();
+  expect(
+    screen.getByText("Buscando receitas...")
+  ).toBeInTheDocument();
+}) 
 
-    expect(resultsSection).not.toBeNull();
-    const detailsButton = within(resultsSection as HTMLElement).getByRole(
-      "button",
-      {name: "Ver Detalhes" }
-    );
+it("does not show empty results while searching by ingredient", async() => {
+  vi.spyOn(globalThis, "fetch")
+  .mockResolvedValueOnce({
+    ok: true,
+    json: async () => mockRecipe,
+  } as Response).mockImplementationOnce(() => {
+    return new Promise<Response>(() => {});
+  })
 
-    await user.click(detailsButton);
+  const user = userEvent.setup();
+  render(<App />)
 
-    expect(
-      await screen.findByText("Ocorreu um erro inesperado.")
-    ).toBeInTheDocument();
-    expect(fetchMock).toHaveBeenNthCalledWith(
-      3,
-      `http://localhost:8000/recipes/${searchRecipe.id}`
-    )
+  const ingredientModeButton = screen.getByRole("button", {
+    name: "Por Ingrediente",
+  });
+  await user.click(ingredientModeButton);
 
+  const input = screen.getByPlaceholderText('Buscar por ingrediente')
+  const searchButton = screen.getByRole("button", {name: "Buscar"})
+
+  await user.type(input, "Chicken");
+  await user.click(searchButton)
+
+  expect(
+    screen.getByText("Buscando receitas...")
+  ).toBeInTheDocument();
+  expect(
+    screen.queryByText("Nenhuma receita encontrada para esse ingrediente.")
+  ).not.toBeInTheDocument();
 })
 

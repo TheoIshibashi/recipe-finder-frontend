@@ -9,6 +9,8 @@ interface SearchSectionProps {
     handleSearch: (event: React.SyntheticEvent<HTMLFormElement>) => void;
     hasNameSearched: boolean;
     searchResultsCount: number;
+    searchLoading: boolean;
+    searchError: string | null;
 
     ingredientTerm: string;
     setIngredientTerm: React.Dispatch<React.SetStateAction<string>>;
@@ -25,6 +27,8 @@ export function SearchSection({
     handleSearch,
     hasNameSearched,
     searchResultsCount,
+    searchLoading,
+    searchError,
     ingredientTerm,
     setIngredientTerm,
     handleIngredientSearch,
@@ -63,9 +67,13 @@ export function SearchSection({
                     <button type="submit">Buscar</button>
                   </form>
                 
-                  {hasNameSearched && searchResultsCount === 0 && (
+                  {hasNameSearched 
+                  && searchResultsCount === 0 
+                  && !searchLoading 
+                  && searchError === null && (
                     <p>Nenhuma receita encontrada.</p>
                   )}
+
                 </>
                )} 
               
@@ -82,7 +90,10 @@ export function SearchSection({
                     <button type="submit">Buscar</button>
                   </form>
 
-                  {hasIngredientSearched && ingredientResultsCount === 0 && (
+                  {hasIngredientSearched 
+                  && ingredientResultsCount === 0 
+                  && !searchLoading 
+                  && searchError === null && (
                     <p>Nenhuma receita encontrada para esse ingrediente.</p>
                   )}
                 </>
