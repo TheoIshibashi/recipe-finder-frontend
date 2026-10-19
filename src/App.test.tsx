@@ -439,7 +439,7 @@ it("does not show empty results while searching by ingredient", async() => {
   })
 
   const user = userEvent.setup();
-  render(<App />)
+  render(<App />);
 
   const ingredientModeButton = screen.getByRole("button", {
     name: "Por Ingrediente",
@@ -460,3 +460,34 @@ it("does not show empty results while searching by ingredient", async() => {
   ).not.toBeInTheDocument();
 })
 
+it("shows an error when the ingredient search request fails", async () => {
+  vi.spyOn(globalThis, "fetch")
+    .mockResolvedValueOnce({
+      ok: true,
+      json: async () => mockRecipe,
+    } as Response)
+    .mockResolvedValueOnce({
+      ok: false,
+    } as Response);
+
+    const user = userEvent.setup();
+
+    render(<App />);
+
+    const ingredientModeButton = screen.getByRole("button", {
+      name: "Por Ingrediente",
+    });
+
+    await user.click(ingredientModeButton);
+
+    const input = screen.getByPlaceholderText('Buscar por ingrediente'); 
+    const searchButton = screen.getByRole("button", {name: "Buscar"});
+
+    await user.type(input, "Chicken");
+    await user.click(searchButton);
+
+    expect(
+      await screen.findByText("Ocorreu um erro inesperado.")
+    ).toBeInTheDocument();
+    expect(screen.queryByText("Nenhuma receita encontrada para esse ingrediente.")).not.toBeInTheDocument();
+});
