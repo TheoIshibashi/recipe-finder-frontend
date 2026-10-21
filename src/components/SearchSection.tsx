@@ -96,6 +96,7 @@ export function SearchSection({
                   && searchError === null && (
                     <p>Nenhuma receita encontrada para esse ingrediente.</p>
                   )}
+                  
                 </>
               )}
         </section>

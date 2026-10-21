@@ -51,3 +51,24 @@ it("calls onSelect with recipe id when button clicked", async () => {
 
     expect(onSelect).toHaveBeenCalledWith(recipe.id);
 });
+
+it("renders recipe without thumbnail", () => {
+    const recipeWithoutImage = {
+        ...recipe,
+        thumbnail: null,
+    };
+
+    render (
+        <RecipeCard
+            recipe={recipeWithoutImage}
+            onSelect={() => {}}
+        />
+    );
+
+    expect(
+        screen.getByText(`Nome da Receita: ${recipeWithoutImage.name}`)
+    ).toBeInTheDocument();
+    expect(
+        screen.queryByRole("img")
+    ).not.toBeInTheDocument();
+});

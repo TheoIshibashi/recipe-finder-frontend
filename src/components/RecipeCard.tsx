@@ -11,11 +11,13 @@ export function RecipeCard({recipe, onSelect}: RecipeCardProps){
         <article className="recipe-card">
             <h3>Nome da Receita: {recipe.name}</h3>
 
-            <img 
+            {recipe.thumbnail && (
+              <img 
                 src={recipe.thumbnail}
                 alt={recipe.name}
-            />
-
+               />  
+            )}
+            
             <button
                 type="button"
                 onClick={() => {

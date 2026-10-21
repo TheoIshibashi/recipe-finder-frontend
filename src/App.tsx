@@ -224,10 +224,13 @@ function App(){
             <h2>Detalhes da receita</h2>
             
             <div className="recipe-detail-top">
-              <img 
-                src={selectedRecipe.thumbnail} 
-                alt={selectedRecipe.name}
-              />
+              {selectedRecipe.thumbnail && (
+                <img 
+                  src={selectedRecipe.thumbnail} 
+                  alt={selectedRecipe.name}
+                />
+              )}
+              
               <div>
                 <h3>{selectedRecipe.name}</h3>
                 <p>Categoria: {selectedRecipe.category}</p>
@@ -300,8 +303,10 @@ function App(){
             id="random-recipe" 
             aria-labelledby="random-recipe-title"
           >
+            {recipe.thumbnail && (
+              <img src={recipe.thumbnail} alt={recipe.name}/>
+            )}
             
-            <img src={recipe.thumbnail} alt={recipe.name}/>
 
             <div className="random-recipe-content">
               <h2 id="random-recipe-title">Sugestão aleatória</h2>
