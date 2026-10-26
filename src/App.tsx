@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import type{ Recipe, RecipeSummary, } from "./types/recipe";
 import "./App.css";
 import {SearchSection} from "./components/SearchSection";
@@ -28,6 +28,8 @@ function App(){
 
   const [detailsLoading, setDetailsLoading] = useState<boolean>(false);
   const [detailsError, setDetailsError] = useState<string | null>(null);
+
+  const searchControllerRef = useRef<AbortController | null>(null);
 
   useEffect(() => {
     fetch(`${API_URL}/recipes/random`)
@@ -59,6 +61,10 @@ function App(){
       return;
     }
 
+    searchControllerRef.current?.abort();
+    const controller = new AbortController();
+    searchControllerRef.current = controller;
+
     setHasNameSearched(true);
 
     const safeTerm = encodeURIComponent(cleanTerm);
@@ -67,22 +73,32 @@ function App(){
     setSearchLoading(true);
     setSearchError(null);
 
-    fetch(url)
+    fetch(url, {
+      signal: controller.signal,
+    })
     .then((response) => {
       if (!response.ok){
         throw new Error("Resposta inválida")
       }
-
       return response.json();
     })
     .then((data) =>{
-      setSearchResults(data)
+      if (searchControllerRef.current === controller){
+        setSearchResults(data)
+      }
     })
-    .catch(() =>{
-      setSearchError("Ocorreu um erro inesperado.")
+    .catch((error) =>{
+      if (error instanceof Error && error.name === "AbortError"){
+        return;
+      }
+      if (searchControllerRef.current === controller){
+        setSearchError("Ocorreu um erro inesperado.")
+      }
     })
     .finally(() =>{
-      setSearchLoading(false);
+      if (searchControllerRef.current === controller){
+        setSearchLoading(false);
+      }
     });
   };
 
@@ -94,6 +110,10 @@ function App(){
       return;
     }
 
+    searchControllerRef.current?.abort();
+    const controller = new AbortController();
+    searchControllerRef.current = controller;
+
     setHasIngredientSearched(true);
 
     const safeTerm = encodeURIComponent(cleanTerm);
@@ -102,7 +122,9 @@ function App(){
     setSearchLoading(true);
     setSearchError(null);
 
-    fetch(url)
+    fetch(url, {
+      signal: controller.signal,
+    })
     .then((response) => {
       if (!response.ok){
         throw new Error("Resposta inválida")
@@ -111,13 +133,22 @@ function App(){
       return response.json();
     })
     .then((data) =>{
-      setIngredientResults(data)
+      if (searchControllerRef.current === controller){
+        setIngredientResults(data)
+      }
     })
-    .catch(() =>{
-      setSearchError("Ocorreu um erro inesperado.")
+    .catch((error) =>{
+      if (error instanceof Error && error.name === "AbortError"){
+        return;
+      }
+      if (searchControllerRef.current === controller){
+        setSearchError("Ocorreu um erro inesperado.")
+      }
     })
     .finally(() =>{
-      setSearchLoading(false);
+      if (searchControllerRef.current === controller){
+        setSearchLoading(false);
+      }
     });
   };
 

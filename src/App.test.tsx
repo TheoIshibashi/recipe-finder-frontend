@@ -1,4 +1,4 @@
-import {render, screen, within} from "@testing-library/react"
+import {act, render, screen, within} from "@testing-library/react"
 import userEvent from "@testing-library/user-event";
 import {beforeEach, expect, it, vi} from "vitest"
 import App from "./App"
@@ -97,7 +97,10 @@ it("searches recipes by name", async () => {
     ).toBeInTheDocument();
     expect(fetchMock).toHaveBeenNthCalledWith(
         2, 
-        "http://localhost:8000/recipes/search?name=Chicken"
+        "http://localhost:8000/recipes/search?name=Chicken",
+        {
+          signal: expect.any(AbortSignal),
+        }
     );
 });
 
@@ -131,7 +134,10 @@ it("searches recipes by ingredient", async () => {
     ).toBeInTheDocument();
     expect(fetchMock).toHaveBeenNthCalledWith(
         2, 
-        "http://localhost:8000/recipes/by-ingredient?ingredient=Chicken"
+        "http://localhost:8000/recipes/by-ingredient?ingredient=Chicken",
+        {
+          signal: expect.any(AbortSignal),
+        }
     );
 });
 
@@ -337,7 +343,10 @@ it("shows a message when no recipes are found by ingredient", async () => {
     ).toBeInTheDocument();
     expect(fetchMock).toHaveBeenNthCalledWith(
         2, 
-        "http://localhost:8000/recipes/by-ingredient?ingredient=Chicken"
+        "http://localhost:8000/recipes/by-ingredient?ingredient=Chicken",
+        {
+          signal: expect.any(AbortSignal),
+        }
     );
 });
 
@@ -503,4 +512,136 @@ it("shows an error when loading the random recipe fails", async () => {
     expect(
       await screen.findByText("Ocorreu um erro inesperado.")
     ).toBeInTheDocument();
+});
+
+it("cancels the previous search when a new search starts", async () => {
+  const beefRecipe = {
+      ...searchRecipe,
+      name: "Beef Test",
+    };
+  
+  let resolveChicken: ((response: Response) => void) | undefined;
+
+  const fetchmock = vi.spyOn(globalThis, "fetch")
+    .mockResolvedValueOnce({
+      ok: true,
+      json: async() => mockRecipe,
+    } as Response)
+      .mockImplementationOnce(() => {
+        return new Promise<Response>((resolve) => {
+          resolveChicken = resolve;
+        });
+    }).mockResolvedValueOnce({
+      ok: true,
+      json: async () => [beefRecipe]
+    } as Response);
+
+    const user = userEvent.setup();
+
+    render(<App />)
+
+    const input = screen.getByPlaceholderText('Buscar por nome')
+    const searchButton = screen.getByRole("button", {name: "Buscar"})
+
+    await user.type(input, "Chicken");
+    await user.click(searchButton);
+
+    await user.clear(input);
+    await user.type(input, "Beef Test");
+
+    await user.click(searchButton);
+
+    const chickenSignal = fetchmock.mock.calls[1][1]?.signal;
+    expect(chickenSignal?.aborted).toBe(true);
+
+    
+
+    expect(
+      await screen.findByText(`Nome da Receita: ${beefRecipe.name}`)
+    ).toBeInTheDocument();
+
+    const chickenResponse = {
+      ok: true,
+      json: async () => [searchRecipe],
+    } as Response;
+
+    expect(resolveChicken).toBeDefined();
+    await act(async () => {
+       resolveChicken?.(chickenResponse)
+    })
+
+    expect(
+      screen.getByText(`Nome da Receita: ${beefRecipe.name}`)
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByText(`Nome da Receita: ${searchRecipe.name}`)
+    ).not.toBeInTheDocument();
 })
+
+it("keeps loading while the latest search is pending", async () => {
+
+    const beefRecipe = {
+      ...searchRecipe,
+      name: "Beef Test",
+    };
+  
+
+  let resolveChicken: ((response: Response) => void) | undefined;
+  let resolveBeef: ((response: Response) => void) | undefined;
+
+  vi.spyOn(globalThis, "fetch")
+    .mockResolvedValueOnce({
+      ok: true,
+      json: async() => mockRecipe,
+    } as Response)
+    .mockImplementationOnce(() => {
+      return new Promise<Response>((resolve) => {
+        resolveChicken = resolve;
+      });
+    }).mockImplementationOnce(() => {
+      return new Promise<Response>((resolve) => {
+        resolveBeef = resolve;
+      });
+    });
+
+    const user = userEvent.setup();
+    render(<App />)
+
+    const input = screen.getByPlaceholderText('Buscar por nome')
+    const searchButton = screen.getByRole("button", {name: "Buscar"})
+
+    await user.type(input, "Chicken");
+    await user.click(searchButton);
+
+    await user.clear(input);
+    await user.type(input, "Beef Test");
+    await user.click(searchButton);
+
+    const chickenResponse = {
+      ok: true,
+      json: async () => [searchRecipe],
+    } as Response;
+
+    expect(resolveChicken).toBeDefined();
+    await act(async () => {
+      resolveChicken?.(chickenResponse)
+    })
+
+    expect(
+      screen.getByText("Buscando receitas...")
+    ).toBeInTheDocument();
+    
+    const beefResponse = {
+      ok: true,
+      json: async () => [beefRecipe],
+    } as Response;
+
+    expect(resolveBeef).toBeDefined();
+    await act(async () => {
+      resolveBeef?.(beefResponse)
+    })
+
+    expect(
+      screen.queryByText("Buscando receitas...")
+    ).not.toBeInTheDocument();
+});
